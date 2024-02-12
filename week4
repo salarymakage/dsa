@@ -1,0 +1,70 @@
+class MyArray:
+    def __init__(self):
+        self.array = []
+
+    def insert(self):
+        num_elements = int(input("How many elements do you want to insert? "))
+        
+        for _ in range(num_elements):
+            element = input("Enter element: ")
+            self.array.append(element)
+        print(f"{num_elements} elements inserted.")
+
+    def insertAt(self, element, position=None):
+        
+        if position is None or position > len(self.array) or position < 0:
+            self.array.append(element)
+        else:
+            self.array.insert(position, element)
+
+    def displayArray(self):
+        print("Array contents:", self.array)
+        input("Press enter to return to the main menu...")
+
+    def deleteElement(self, position=None):
+        if position is None or position >= len(self.array) or position < 0:
+            return self.array.pop() if self.array else None
+        else:
+            return self.array.pop(position)
+
+    def searchElement(self, element):
+        non_duplicate = [x for x in self.array if x == element and self.array.count(x) == 1]
+        duplicate = [x for x in self.array if x == element and self.array.count(x) > 1]
+        return (non_duplicate, duplicate)
+
+    def displayMenu(self):
+        while True:
+            print("\n1. Insert")
+            print("2. Insert at Position")
+            print("3. Display")
+            print("4. Delete")
+            print("5. Search")
+            print("6. Bubble Sort")
+            print("7. Exit")
+            n = int(input("Enter number: "))
+
+            if n == 1:
+                self.insert() 
+            elif n == 2:
+                element = input("Enter element to insert at a position: ")
+                position = int(input("Enter position: "))
+                self.insertAt(element, position)
+            elif n == 3:
+                self.displayArray()
+            elif n == 4:
+                position = input("Enter position to delete (leave empty for last element): ")
+                position = int(position) if position.isdigit() else None
+                self.deleteElement(position)
+            elif n == 5:
+                element = input("Enter element to search for: ")
+                print("Non-duplicate matches:", self.searchElement(element)[0])
+                print("Duplicate matches:", self.searchElement(element)[1])
+            elif n == 7:
+                print("Exiting...")
+                break
+            else:
+                print("Invalid option. Please enter a number between 1 and 7.")
+
+if __name__ == "__main__":
+    my_array = MyArray()
+    my_array.displayMenu()
