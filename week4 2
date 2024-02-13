@@ -1,0 +1,130 @@
+# This is a blueprint for creating a list that can do special things.
+class MyArray:
+    # This is create a empty box.
+    def __init__(self):
+        self.array = []  
+
+    # This is add new array 
+    def insert(self):
+        num_elements = int(input("How many numbers to add? "))  
+        
+        # It asks for each number and puts it in the list.
+        for _ in range(num_elements):
+            element = int(input("Type a number: "))  
+            self.array.append(element)  
+        print(f"You added {num_elements} numbers.")  
+
+    # This lets you put a new number in a special spot in the list.
+    def insertAt(self, element, position=None):
+        element = int(element)  
+        # If you don't pick a spot or the spot is not okay, it adds to the end.
+        if position is None or position > len(self.array) or position < 0:
+            self.array.append(element)
+        else:
+            self.array.insert(position, element)  # Otherwise, it puts the number in the spot you chose.
+
+    # This shows you all the numbers in the list.
+    def displayArray(self):
+        print("Here are the numbers in the list:", self.array)  
+        input("Press enter to go back.")  
+
+    # This takes out a number from the list.
+    def deleteElement(self, position=None):
+        # If you don't tell where, or if the spot is bad, it removes the last number.
+        if position is None or position >= len(self.array) or position < 0:
+            return self.array.pop() if self.array else None
+        else:
+            return self.array.pop(position)  # If you pick a good spot, it takes out the number from there.
+
+# This method counts how many unique numbers and duplicates are in your box.
+    def countAllElements(self):
+        unique_elements = set(self.array)  # Make a new list with no repeated numbers.
+        non_duplicate_count = 0  # Start a count of numbers that don't have any twins.
+        duplicate_count = 0  # Start a count of numbers that have twins.
+
+        # Look at each unique number one by one.
+        for element in unique_elements:
+            count = self.array.count(element)  # Count how many times each number appears in the box.
+            if count == 1:
+                non_duplicate_count += 1  # If a number is alone, count it as a non-duplicate.
+            else:
+                duplicate_count += count  # If a number has twins, count all of them as duplicates.
+
+        # Give back the final counts of non-duplicates and duplicates.
+        return non_duplicate_count, duplicate_count
+
+
+    # This method sorts the numbers in your box, either from smallest to biggest or biggest to smallest.
+    def bubbleSort(self, ascending=True):
+        # Look at each number in the box one by one.
+        for i in range(len(self.array)):
+            # Keep checking the numbers and switch them if they are in the wrong order.
+            for j in range(0, len(self.array)-i-1):
+                # If we want to sort from smallest to biggest (ascending).
+                if ascending:
+                    # If the number is bigger than the one next to it, switch their places.
+                    if self.array[j] > self.array[j+1]:
+                        self.array[j], self.array[j+1] = self.array[j+1], self.array[j]
+                # If we want to sort from biggest to smallest (descending).
+                else:
+                    # If the number is smaller than the one next to it, switch their places.
+                    if self.array[j] < self.array[j+1]:
+                        self.array[j], self.array[j+1] = self.array[j+1], self.array[j]
+
+    def insertionSort(self, ascending=True):
+        # Start with the second number and go to the end of the array.
+        for i in range(1, len(self.array)):
+            key = self.array[i]  # The number we want to sort.
+            j = i-1  # The number before the one we want to sort.
+            # Keep moving the numbers around until they are in the right order.
+            while j >= 0 and ((self.array[j] < key) if ascending else (self.array[j] > key)):
+                self.array[j + 1] = self.array[j]  # Move the number one spot over.
+                j -= 1  # Go back to the previous number.
+            self.array[j + 1] = key  # Put the number in the right place.
+
+    def displayMenu(self):
+        while True:
+            print("\n1. Insert")
+            print("2. Insert at Position")
+            print("3. Display")
+            print("4. Delete")
+            print("5. Search")
+            print("6. Bubble Sort")
+            print("7. Insertion Sort")
+            print("8. Exit")
+
+            n = int(input("Enter number: "))
+
+            if n == 1:
+                self.insert() 
+            elif n == 2:
+                element = input("Enter element to insert at a position: ")
+                position = int(input("Enter position: "))
+                self.insertAt(element, position)
+            elif n == 3:
+                self.displayArray()
+            elif n == 4:
+                position = input("Enter position to delete (leave empty for last element): ")
+                position = int(position) if position.isdigit() else None
+                self.deleteElement(position)
+            elif n == 5:
+                non_duplicate_count, duplicate_count = self.countAllElements()
+                print("Non-duplicate element count:", non_duplicate_count)
+                print("Duplicate element count:", duplicate_count)
+            elif n == 6:
+                self.bubbleSort()  
+                self.displayArray()
+
+            elif n == 7:
+                self.insertionSort() 
+                self.displayArray()
+
+            elif n == 8:
+                print("Exiting...")
+                break   
+            else:
+                print("Invalid option. Please enter a number between 1 and 7.")
+
+if __name__ == "__main__":
+    my_array = MyArray()
+    my_array.displayMenu()
